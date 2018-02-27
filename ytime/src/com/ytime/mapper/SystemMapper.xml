@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytime.mapper.SystemMapper">
+	<select id="getSlidersList" resultType="slider">
+		SELECT 
+		   sliderID,
+		   sliderName,
+		   sliderSubject,
+		   sliderDesc,
+		   sliderImg,
+		   sflag,
+		   sorder
+		 FROM sliders
+		 WHERE sflag = 1
+		 ORDER BY sorder, sliderName;
+	</select>
+	<select id="getBussinessList" resultType="bussiness">
+		SELECT
+			busID,
+			bname,
+			bsubject,
+			bdesc,
+			bimg,
+			bflag,
+			border
+		FROM businesses
+		WHERE bflag = 1
+		ORDER BY border, bname;
+	</select>
+	<select id="getProjectVOList" resultType="projectVO">
+		SELECT 
+		  p.projid,
+		  p.pname,
+		  p.pyear,
+		  p.pimg,
+		  c.cname,
+		  c.curl
+		FROM projects p
+		  LEFT JOIN customers	c ON(p.pcustomer = c.custid)
+		WHERE p.pflag = 1
+		ORDER BY p.porder, p.pname;
+	</select>
+	<select id="getTelNumber" resultType="java.lang.String">
+		SELECT
+		  b.bvalue
+		FROM baseinfo b
+		WHERE b.bkey = 1003 AND b.bflag = 1
+	</select>
+	<select id="getAdress" resultType="java.lang.String">
+		SELECT
+		  b.bvalue
+		FROM baseinfo b
+		WHERE b.bkey = 1002 AND b.bflag = 1
+	</select>
+	<select id="getCompany" resultType="java.lang.String">
+		SELECT
+		  b.bvalue
+		FROM baseinfo b
+		WHERE b.bkey = 1001 AND b.bflag = 1
+	</select>
+	<select id="getEmail" resultType="java.lang.String">
+		SELECT
+		  b.bvalue
+		FROM baseinfo b
+		WHERE b.bkey = 1004 AND b.bflag = 1
+	</select>
+	<insert id="insertSubmit" parameterType="subinfo">
+		INSERT INTO subinfos (sname,email,ssubject,sdesc,ctime,sflag)
+		VALUES (#{sname},#{email},#{ssubject},#{sdesc},#{ctime},1);
+	</insert>
+</mapper>

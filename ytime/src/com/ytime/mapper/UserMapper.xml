@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytime.mapper.UserMapper">
+	<parameterMap type="java.util.Map" id="changeUflag">
+		<parameter property="userid" javaType="int"/>
+		<parameter property="uflag" javaType="int"/>
+	</parameterMap>
+	<parameterMap type="java.util.Map" id="changePass">
+		<parameter property="userid" javaType="int"/>
+		<parameter property="password" javaType="string"/>
+	</parameterMap>
+	<sql id="user_condition">
+		<if test="username != null and username != ''">
+    		AND username LIKE '%${username}%'
+    	</if>
+    	<if test="loginname != null and loginname != ''">
+    		AND loginname LIKE '%${loginname}%'
+    	</if>
+    	<if test="email !=null and email != ''">
+    		AND email LIKE '%${email}%'
+    	</if>
+    	<if test="power !=null and power != -1 and power != 0">
+    		AND power = #{power}
+    	</if>
+    	<if test="uflag !=null and uflag != -1 and uflag != 0">
+    		AND uflag = #{uflag}
+    	</if>
+	</sql>
+	<select id="selectUserList" parameterType="userSearchVO" resultType="userinfo">
+		SELECT
+			userid,
+			username,
+			loginname,
+			email,
+			power,
+			uflag
+		FROM userinfo
+		<where>
+			<include refid="user_condition"/>
+		</where>
+		ORDER BY userid
+		LIMIT #{itemIndex},#{pageItems}	
+	</select>
+	<select id="selectUserCount" parameterType="userSearchVO" resultType="int">
+		SELECT
+			count(userid)
+		FROM userinfo
+		<where>
+			<include refid="user_condition"/>
+		</where>
+	</select>
+	<select id="findLoginname" parameterType="string" resultType="int">
+		SELECT
+			count(userid)
+		FROM userinfo
+		WHERE loginname = #{loginname}
+	</select>
+	<select id="selectUserByID" parameterType="int" resultType="userinfo">
+		SELECT
+			userid,
+			username,
+			email,
+			power
+		FROM userinfo
+		WHERE userid = #{userid}
+	</select>
+	<insert id="insertUser" parameterType="userinfoVO">
+		INSERT INTO userinfo
+            (username,
+             loginname,
+             loginpass,
+             email,
+             power,
+             uflag)
+		VALUES (#{username},#{loginname},#{loginpass},#{email},#{power},1)
+	</insert>
+	<update id="updateUserFlag" parameterMap="changeUflag">
+		UPDATE userinfo
+		SET uflag = #{uflag}
+		WHERE userid = #{userid}
+	</update>
+	<update id="updatePassword" parameterMap="changePass">
+		UPDATE userinfo
+		SET loginpass = #{password}
+		WHERE userid = #{userid}
+	</update>
+	<update id="updateUser" parameterType="userinfoVO">
+		UPDATE userinfo
+		SET username = #{username},
+		    email = #{email},
+		    power = #{power}
+		WHERE userid = #{userid}
+	</update>
+	
+</mapper>

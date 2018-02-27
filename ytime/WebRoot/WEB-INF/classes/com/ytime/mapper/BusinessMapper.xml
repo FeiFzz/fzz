@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ytime.mapper.BusinessMapper">
+
+	<!-- 
+	<parameterMap type="java.util.Map" id="changePassParam">
+		<parameter property="newpass" javaType="string"/>
+		<parameter property="userid" javaType="int"/>
+	</parameterMap>
+	 
+	 <sql id="project_condition">
+		<if test="username != null and username != ''">
+    		AND username LIKE '%${username}%'
+    	</if>
+    	<if test="loginname != null and loginname != ''">
+    		AND loginname LIKE '%${loginname}%'
+    	</if>
+    	<if test="email !=null and email != ''">
+    		AND email LIKE '%${email}%'
+    	</if>
+    	<if test="power !=null and power != -1 and power != 0">
+    		AND power = #{power}
+    	</if>
+    	<if test="uflag !=null and uflag != -1 and uflag != 0">
+    		AND uflag = #{uflag}
+    	</if>
+	</sql>
+	-->
+	<select id="selectBusinessList" parameterType="business" resultType="business">
+		SELECT
+  			busID,
+  			bname,
+  			bsubject,
+  			bdesc,
+  			bimg,
+  			bflag,
+  			border
+			FROM businesses
+		
+		<!-- 
+		SELECT
+			userid,
+			username,
+			loginname,
+			loginpass,
+			email,
+			power,
+			uflag
+		FROM userinfo
+		WHERE loginname = #{loginname}
+		AND loginpass = #{loginpass}
+		AND uflag = 1	 -->
+	</select>
+	<select id="selectBusinessCount"  resultType="int">
+		SELECT
+			count(busID)
+		FROM businesses
+		<!-- 
+		<where>
+			<include refid="project_condition"/>
+		</where>
+		 -->
+	</select>
+	<select id="selectBusinessByID" parameterType="int" resultType="business">
+		SELECT
+  			busID,
+  			bname,
+  			bsubject,
+  			bdesc,
+  			bimg,
+  			bflag,
+  			border
+			FROM businesses
+		WHERE busID = #{busID}
+	</select>
+	<!-- 
+	<update id="updateMyInfo" parameterType="userinfoVO">
+		UPDATE userinfo
+		SET username = #{username},
+			email = #{email}
+		WHERE userid = #{userid}
+	</update>
+	<update id="updatePassword" parameterMap="changePassParam">
+		UPDATE userinfo
+		SET loginpass = #{newpass}
+		WHERE userid = #{userid}
+	</update>
+	 -->
+</mapper>
